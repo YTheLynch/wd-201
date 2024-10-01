@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration</title>
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: lightgray;
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      label {
+        display: inline-block;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="user-form">
+      <div class="container">
+        <div>
+          <label for="name"> Name: </label>
+          <input required type="text" id="name" name="name" />
+        </div>
+
+        <div>
+          <label for="email">Email: </label>
+          <input required type="email" name="email" id="email" />
+        </div>
+
+        <div>
+          <label for="password">Password: </label>
+          <input required type="password" name="password" id="password" />
+        </div>
+
+        <div>
+          <label for="dob">Date of Birth: </label>
+          <input required type="date" id="dob" name="dob" />
+        </div>
+
+        <div>
+          <label for="acceptTerms">Accept Terms & Conditions</label>
+          <input type="checkbox" id="acceptTerms" name="acceptTerms" />
+        </div>
+
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+
+    <h2>Entries</h2>
+    <div id="user-entries"></div>
+
+    <script>
+      let userEntries = JSON.parse(localStorage.getItem("user-entries")) || [];
+
+      const validateDate = (dob) => {
+        const date = new Date(dob.value);
+        const currDate = new Date();
+        const age = Math.floor(
+          (currDate - date) / (1000 * 60 * 60 * 24 * 365.25)
+        );
+        if (age < 18 || age > 55) {
+          dob.setCustomValidity("The Age must be in the range 18 and 55!");
+        } else {
+          dob.setCustomValidity("");
+        }
+      };
+
+      const renderEntries = () => {
+        let entries = `<table>
+  <tr>
+  <th>Name</th>
+  <th>Email</th>
+  <th>Password</th>
+  <th>Dob</th>
+  <th>Accepted terms?</th>
+  </tr>`;
+        userEntries.forEach((entry) => {
+          entries += `
+    <tr>
+    <td>${entry.name}</td>
+    <td>${entry.email}</td>
+    <td>${entry.password}</td>
+    <td>${entry.dobv}</td>
+    <td>${entry.accepted}</td>
+    </tr>`;
+        });
+        entries += `</table>`;
+
+        document.getElementById("user-entries").innerHTML = entries;
+      };
+      renderEntries();
+
+      const dob = document.getElementById("dob");
+      dob.addEventListener("input", () => validateDate(dob));
+
+      let userForm = document.getElementById("user-form");
+
+      const saveUserForm = (event) => {
+        event.preventDefault();
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const dobv = document.getElementById("dob").value;
+        const accepted = document.getElementById("acceptTerms").checked;
+
+        console.log(dobv);
+        const entry = {
+          name,
+          email,
+          password,
+          dobv,
+          accepted,
+        };
+
+        userEntries.push(entry);
+        localStorage.setItem("user-entries", JSON.stringify(userEntries));
+        renderEntries();
+      };
+
+      userForm.addEventListener("submit", saveUserForm);
+    </script>
+  </body>
+</html>
