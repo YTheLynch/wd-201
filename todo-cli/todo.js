@@ -23,7 +23,7 @@ const todoList = () => {
     const toDisplayableList = (list) => {
       return list.map(item => 
        `[${item.completed?"X":" "}] ${item.title} ${item.dueDate === today ? "" : item.dueDate}`
-      ).join("\n")
+      ).join("\n");
     }
   
     return {
