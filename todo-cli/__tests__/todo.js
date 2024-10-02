@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 const todoList = require("../todo");
 
-// eslint-disable-next-line no-unused-vars
 const {
   all,
   markAsComplete,
@@ -9,6 +8,7 @@ const {
   overdue,
   dueToday,
   dueLater,
+  // eslint-disable-next-line no-unused-vars
   toDisplayableList,
 } = todoList();
 
